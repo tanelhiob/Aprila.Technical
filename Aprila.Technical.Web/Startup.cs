@@ -15,8 +15,8 @@ namespace Aprila.Technical.Web
     {
        public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = "Data Source=App_Data\\Aprila.Technical.sqlite;";
-            services.AddDbContextPool<MyDbContext>(opt => opt.UseSqlite(connectionString));
+            var connectionString = "Database";
+            services.AddDbContextPool<MyDbContext>(opt => opt.UseInMemoryDatabase(connectionString));
 
             services.AddSingleton<ICalculator, Calculator>(serviceProvider => new Calculator(connectionString));
        }
@@ -24,11 +24,6 @@ namespace Aprila.Technical.Web
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
-
-            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                scope.ServiceProvider.GetRequiredService<MyDbContext>().Database.Migrate();
-            }
 
             app.Run(async (context) =>
             {

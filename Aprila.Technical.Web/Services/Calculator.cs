@@ -18,7 +18,7 @@ namespace Aprila.Technical.Web.Services
         public int Add(int a, int b)
         {
             var options = new DbContextOptionsBuilder<MyDbContext>()
-                .UseSqlite(_connectionString)
+                .UseInMemoryDatabase(_connectionString)
                 .Options;
 
             using (var db = new MyDbContext(options))
