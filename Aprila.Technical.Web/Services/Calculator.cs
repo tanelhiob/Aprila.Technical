@@ -1,24 +1,37 @@
 ﻿using Aprila.Technical.Web.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Aprila.Technical.Web.Services
 {
     public class Calculator : ICalculator
     {
-        //private readonly MyDbContext _db;
+        //private readonly IServiceProvider _services;
 
-        //public Calculator(MyDbContext db)
+        //public Calculator(IServiceProvider services) 
         //{
-        //    _db = db;
+        //    _services = services;
         //}
+
+        private readonly string _connectionString;
+
+        public Calculator(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
         public int Add(int a, int b)
         {
-            // return a + b + (_db.Users.FirstOrDefault()?.Name.Length ?? 0);
-            return a + b;
+            var options = new DbContextOptionsBuilder<MyDbContext>()
+                .UseSqlite(_connectionString)
+                .Options;
+
+            using (var db = new MyDbContext(options))
+            {
+                return a + b + (db.Users.FirstOrDefault()?.Name.Length ?? 0);
+            }
         }
     }
 }
