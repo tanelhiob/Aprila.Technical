@@ -25,6 +25,11 @@ namespace Aprila.Technical.Web
         {
             app.UseDeveloperExceptionPage();
 
+            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<MyDbContext>().Database.Migrate();
+            }
+
             app.Run(async (context) =>
             {
                 var responseMessage = new StringBuilder();
