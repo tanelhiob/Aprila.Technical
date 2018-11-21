@@ -24,7 +24,7 @@ namespace Aprila.Technical.Web
 
         public void Configure(IApplicationBuilder app, ICalculator calculator)
         {
-            app.Run(async (request) => await Task.FromResult("Hello, world"));
+            app.Run(async (context) => await context.Response.WriteAsync(":P"));
         }
     }
 }
