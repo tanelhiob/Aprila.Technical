@@ -15,14 +15,19 @@ namespace Aprila.Technical.Web
     {
        public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = "Database";
-            services.AddDbContextPool<MyDbContext>(opt => opt.UseInMemoryDatabase(connectionString));
+            var connectionString = "Data Source=MyDatabase.db";
+            services.AddDbContextPool<MyDbContext>(opt => opt.UseSqlite(connectionString));
 
             services.AddSingleton<ICalculator, Calculator>(serviceProvider => new Calculator(connectionString));
        }
 
         public void Configure(IApplicationBuilder app)
         {
+            using(var scope = app.ApplicationServices.CreateScope())
+            {
+                scope.ServiceProvider.GetService<MyDbContext>().Database.Migrate();
+            }
+ 
             app.UseDeveloperExceptionPage();
 
             app.Run(async (context) =>

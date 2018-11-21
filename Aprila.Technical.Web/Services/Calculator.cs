@@ -1,7 +1,5 @@
 ﻿using Aprila.Technical.Web.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Linq;
 
 namespace Aprila.Technical.Web.Services
@@ -18,7 +16,7 @@ namespace Aprila.Technical.Web.Services
         public int Add(int a, int b)
         {
             var options = new DbContextOptionsBuilder<MyDbContext>()
-                .UseInMemoryDatabase(_connectionString)
+                .UseSqlite(_connectionString)
                 .Options;
 
             using (var db = new MyDbContext(options))
